@@ -1,25 +1,48 @@
 import 'package:flutter/material.dart';
 import '../styles/color.dart';
-import 'movie_page.dart';
-import 'cinema_page.dart';
-import 'qr_page.dart';
-import 'fb_page.dart';
 import 'profile_page.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
+class Movie {
+  final String title;
+  final String imageUrl;
+  final double starRate;
+
+  Movie({
+    required this.title,
+    required this.imageUrl,
+    required this.starRate,
+  });
 }
 
-class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
+class HomePage extends StatelessWidget {
+  final List<Movie> nowShowingMovies = [
+    Movie(
+        title: 'The Godfather',
+        imageUrl: 'lib/assets/godfather.jpeg',
+        starRate: 4.9),
+    Movie(
+        title: 'The Godfather',
+        imageUrl: 'lib/assets/godfather.jpeg',
+        starRate: 4.9),
+    Movie(
+        title: 'The Godfather',
+        imageUrl: 'lib/assets/godfather.jpeg',
+        starRate: 4.9),
+  ];
 
-  final List<Widget> _pages = [
-    MoviePage(),
-    CinemaPage(),
-    QrCodePage(),
-    FbPage(),
-    ProfilePage(),
+  final List<Movie> comingSoonMovies = [
+    Movie(
+        title: 'The Godfather',
+        imageUrl: 'lib/assets/godfather.jpeg',
+        starRate: 4.9),
+    Movie(
+        title: 'The Godfather',
+        imageUrl: 'lib/assets/godfather.jpeg',
+        starRate: 4.9),
+    Movie(
+        title: 'The Godfather',
+        imageUrl: 'lib/assets/godfather.jpeg',
+        starRate: 4.9),
   ];
 
   @override
@@ -30,11 +53,6 @@ class _HomePageState extends State<HomePage> {
         title: Row(
           children: [
             GestureDetector(
-              onTap: () {
-                setState(() {
-                  _currentIndex = 0;
-                });
-              },
               child: Image.asset(
                 'lib/assets/onyxLogo.png',
                 height: 36.0,
@@ -65,41 +83,139 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Container(
-        color: MyColors.primary,
-        child: _pages[_currentIndex],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  color: MyColors.white,
+                ),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: MyColors.white,
+                  ),
+                  hintText: 'Search',
+                  hintStyle: TextStyle(
+                    fontSize: 18.0,
+                    color: MyColors.white.withOpacity(0.7),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(
+                      color: MyColors.white,
+                    ),
+                  ),
+                  filled: true,
+                  fillColor: Colors.black.withOpacity(0.3),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Text(
+                'Now Showing',
+                style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.white),
+              ),
+              const SizedBox(height: 16.0),
+              SizedBox(
+                height: 200.0,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: nowShowingMovies.length,
+                  itemBuilder: (context, index) {
+                    return MovieCard(movie: nowShowingMovies[index]);
+                  },
+                ),
+              ),
+              const SizedBox(height: 32.0),
+              const Text(
+                'Coming Soon',
+                style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: MyColors.white),
+              ),
+              const SizedBox(height: 16.0),
+              SizedBox(
+                height: 200.0,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: comingSoonMovies.length,
+                  itemBuilder: (context, index) {
+                    return MovieCard(movie: comingSoonMovies[index]);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.movie),
-            label: 'Movies',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_movies),
-            label: 'Cinema',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code),
-            label: 'QR Code',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.local_cafe),
-            label: 'F&B',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        selectedItemColor: MyColors.primary,
-        unselectedItemColor: MyColors.grey,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+      backgroundColor: MyColors.primary,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: MyColors.second,
+        onPressed: () {},
+        elevation: 5.0,
+        child: const Icon(Icons.local_offer),
+      ),
+    );
+  }
+}
+
+class MovieCard extends StatelessWidget {
+  final Movie movie;
+
+  MovieCard({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.only(right: 16.0),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.asset(
+                movie.imageUrl,
+                height: 160.0,
+                width: 120.0,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                movie.title,
+                style: const TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  background: null,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
