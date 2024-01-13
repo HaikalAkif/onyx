@@ -1,18 +1,8 @@
 import 'package:flutter/material.dart';
 import '../styles/color.dart';
 import 'profile_page.dart';
-
-class Movie {
-  final String title;
-  final String imageUrl;
-  final double starRate;
-
-  Movie({
-    required this.title,
-    required this.imageUrl,
-    required this.starRate,
-  });
-}
+import 'movie_details_page.dart';
+import '../models/movie.dart';
 
 class HomePage extends StatelessWidget {
   final List<Movie> nowShowingMovies = [
@@ -178,43 +168,53 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(right: 16.0),
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      color: Colors.transparent,
-      child: Container(
-        decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MovieDetailsPage(movie: movie),
+          ),
+        );
+      },
+      child: Card(
+        margin: const EdgeInsets.only(right: 16.0),
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.asset(
-                movie.imageUrl,
-                height: 160.0,
-                width: 120.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                movie.title,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  background: null,
+        color: Colors.transparent,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.asset(
+                  movie.imageUrl,
+                  height: 160.0,
+                  width: 120.0,
+                  fit: BoxFit.cover,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  movie.title,
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    background: null,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
