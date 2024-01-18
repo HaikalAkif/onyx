@@ -1,39 +1,59 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../styles/color.dart';
 import 'profile_page.dart';
 import 'movie_details_page.dart';
 import '../models/movie.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatelessWidget {
-  final List<Movie> nowShowingMovies = [
-    Movie(
-        title: 'The Godfather',
-        imageUrl: 'lib/assets/godfather.jpeg',
-        starRate: 4.9),
-    Movie(
-        title: 'The Godfather',
-        imageUrl: 'lib/assets/godfather.jpeg',
-        starRate: 4.9),
-    Movie(
-        title: 'The Godfather',
-        imageUrl: 'lib/assets/godfather.jpeg',
-        starRate: 4.9),
-  ];
+  HomePage({
+    super.key,
+  });
 
-  final List<Movie> comingSoonMovies = [
-    Movie(
-        title: 'The Godfather',
-        imageUrl: 'lib/assets/godfather.jpeg',
-        starRate: 4.9),
-    Movie(
-        title: 'The Godfather',
-        imageUrl: 'lib/assets/godfather.jpeg',
-        starRate: 4.9),
-    Movie(
-        title: 'The Godfather',
-        imageUrl: 'lib/assets/godfather.jpeg',
-        starRate: 4.9),
-  ];
+  void showSnackBar(BuildContext context, SnackBar snackBar) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      snackBar,
+    );
+  }
+
+  Future<http.Response> getMovies(BuildContext context) async {
+    return http.get(
+      Uri.https('www.tgv.com.my', '/api/landing-page/v2/index.json'),
+    );
+  }
+
+  // final List<Movie> nowShowingMovies = [
+  //   Movie(
+  //       title: 'The Godfather',
+  //       imageUrl: 'lib/assets/godfather.jpeg',
+  //       starRate: 4.9),
+  //   Movie(
+  //       title: 'The Godfather',
+  //       imageUrl: 'lib/assets/godfather.jpeg',
+  //       starRate: 4.9),
+  //   Movie(
+  //       title: 'The Godfather',
+  //       imageUrl: 'lib/assets/godfather.jpeg',
+  //       starRate: 4.9),
+  // ];
+
+  // final List<Movie> comingSoonMovies = [
+  //   Movie(
+  //       title: 'The Godfather',
+  //       imageUrl: 'lib/assets/godfather.jpeg',
+  //       starRate: 4.9),
+  //   Movie(
+  //       title: 'The Godfather',
+  //       imageUrl: 'lib/assets/godfather.jpeg',
+  //       starRate: 4.9),
+  //   Movie(
+  //       title: 'The Godfather',
+  //       imageUrl: 'lib/assets/godfather.jpeg',
+  //       starRate: 4.9),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -76,77 +96,154 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  color: MyColors.white,
-                ),
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(
-                    Icons.search,
-                    color: MyColors.white,
+          child: FutureBuilder(
+            future: getMovies(context),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Column(
+                    children: [
+                      Icon(
+                        CupertinoIcons.exclamationmark_circle,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        'Uh oh, something went wrong while loading our latest movies...',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
-                  hintText: 'Search',
-                  hintStyle: TextStyle(
-                    fontSize: 18.0,
-                    color: MyColors.white.withOpacity(0.7),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(
-                      color: MyColors.white,
+                );
+              }
+              if (snapshot.hasData) {
+                final data = jsonDecode(snapshot.data!.body);
+
+                final List<Movie> nowShowingMovies =
+                    (data['nowShowingMovies'] as List<dynamic>)
+                        .map(
+                          (e) => Movie(
+                            title: e['title'],
+                            imageUrl:
+                                'https://www.tgv.com.my${e['poster']['original']}',
+                            starRate: 4.9,
+                          ),
+                        )
+                        .toList();
+
+                final List<Movie> comingSoonMovies =
+                    (data['comingSoonMovies'] as List<dynamic>)
+                        .map(
+                          (e) => Movie(
+                            title: e['title'],
+                            imageUrl:
+                                'https://www.tgv.com.my${e['poster']['original']}',
+                            starRate: 4.9,
+                          ),
+                        )
+                        .toList();
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        color: MyColors.white,
+                      ),
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: MyColors.white,
+                        ),
+                        hintText: 'Search',
+                        hintStyle: TextStyle(
+                          fontSize: 18.0,
+                          color: MyColors.white.withOpacity(0.7),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(
+                            color: MyColors.white,
+                          ),
+                        ),
+                        filled: true,
+                        fillColor: Colors.black.withOpacity(0.3),
+                      ),
                     ),
-                  ),
-                  filled: true,
-                  fillColor: Colors.black.withOpacity(0.3),
+                    const SizedBox(height: 16.0),
+                    const Text(
+                      'Now Showing',
+                      style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: MyColors.white),
+                    ),
+                    const SizedBox(height: 16.0),
+                    SizedBox(
+                      height: 246.0,
+                      child: ListView.builder(
+                        clipBehavior: Clip.none,
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: nowShowingMovies.length,
+                        itemBuilder: (context, index) {
+                          return MovieCard(movie: nowShowingMovies[index]);
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 32.0),
+                    const Text(
+                      'Coming Soon',
+                      style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: MyColors.white),
+                    ),
+                    const SizedBox(height: 16.0),
+                    SizedBox(
+                      height: 246.0,
+                      child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: comingSoonMovies.length,
+                        itemBuilder: (context, index) {
+                          return MovieCard(movie: comingSoonMovies[index]);
+                        },
+                      ),
+                    ),
+                  ],
+                );
+              }
+
+              return const Center(
+                child: Column(
+                  children: [
+                    CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      'Please wait while we are loading our latest movies...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                'Now Showing',
-                style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: MyColors.white),
-              ),
-              const SizedBox(height: 16.0),
-              SizedBox(
-                height: 200.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: nowShowingMovies.length,
-                  itemBuilder: (context, index) {
-                    return MovieCard(movie: nowShowingMovies[index]);
-                  },
-                ),
-              ),
-              const SizedBox(height: 32.0),
-              const Text(
-                'Coming Soon',
-                style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    color: MyColors.white),
-              ),
-              const SizedBox(height: 16.0),
-              SizedBox(
-                height: 200.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: comingSoonMovies.length,
-                  itemBuilder: (context, index) {
-                    return MovieCard(movie: comingSoonMovies[index]);
-                  },
-                ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
@@ -177,43 +274,49 @@ class MovieCard extends StatelessWidget {
           ),
         );
       },
-      child: Card(
-        margin: const EdgeInsets.only(right: 16.0),
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        color: Colors.transparent,
-        child: Container(
-          decoration: BoxDecoration(
+      child: SizedBox(
+        width: 160,
+        child: Card(
+          margin: const EdgeInsets.only(right: 16.0),
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.asset(
-                  movie.imageUrl,
-                  height: 160.0,
-                  width: 120.0,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  movie.title,
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    background: null,
+          color: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    movie.imageUrl,
+                    height: 200.0,
+                    width: 180.0,
+                    fit: BoxFit.cover,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    movie.title,
+                    style: const TextStyle(
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      background: null,
+                      height: 1.25,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

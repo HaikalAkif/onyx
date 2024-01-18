@@ -1,22 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:onyx/screens/index.dart';
-import 'package:onyx/screens/login_page.dart';
+import 'package:onyx/screens/registration_page.dart';
+import 'index.dart';
 import '../styles/color.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({
+class LoginPage extends StatefulWidget {
+  const LoginPage({
     super.key,
   });
 
   @override
-  State<RegistrationPage> createState() => _RegistrationPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _LoginPageState extends State<LoginPage> {
   bool _isPasswordVisible = false;
   bool isLoading = false;
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -26,10 +25,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  void registerUser() async {
-    if (_usernameController.text.isEmpty ||
-        _emailController.text.isEmpty ||
-        _passwordController.text.isEmpty) {
+  void navigateToHome() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => IndexPage()),
+    );
+  }
+
+  void signInUser() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       showSnackBar(
         const SnackBar(
           content: Text('Please fill in all fields!'),
@@ -43,46 +47,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
     });
 
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
-
-      // Update user data for username
-      await userCredential.user!.updateDisplayName(
-        _usernameController.text,
-      );
-
-      if (userCredential.user != null) {
-        const SnackBar snackBar = SnackBar(
-          content: Text('Sign up successful! You may now log in.'),
-        );
-        showSnackBar(snackBar);
-        _usernameController.clear();
-        _emailController.clear();
-        _passwordController.clear();
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        const SnackBar snackBar =
-            SnackBar(content: Text('The password provided is too weak.'));
-        showSnackBar(snackBar);
-      } else if (e.code == 'email-already-in-use') {
-        const SnackBar snackBar = SnackBar(
-            content: Text('The account already exists for that email.'));
-        showSnackBar(snackBar);
-      } else {
-        SnackBar snackBar = SnackBar(
-          content: Text(e.message!),
-        );
-        showSnackBar(snackBar);
-      }
-    } catch (e) {
-      print(e);
       showSnackBar(
         const SnackBar(
-          content: Text('Sign up failed!'),
+          content: Text('Login successful'),
+        ),
+      );
+
+      navigateToHome();
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(
+        SnackBar(
+          content: Text(e.message!),
         ),
       );
     } finally {
@@ -95,6 +74,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Image.asset(
@@ -128,7 +108,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                       const SizedBox(height: 10.0),
                       const Text(
-                        'Sign Up to Onyx',
+                        'Login to Onyx',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -136,24 +116,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                       ),
                       const SizedBox(height: 10.0),
-                      TextField(
-                        controller: _usernameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Username',
-                          filled: true,
-                          fillColor: MyColors.white,
-                          border: OutlineInputBorder(),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: MyColors.primary),
-                          ),
-                          labelStyle: TextStyle(color: MyColors.primary),
-                          prefixIcon: Icon(
-                            Icons.person,
-                            color: MyColors.primary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8.0),
                       TextField(
                         controller: _emailController,
                         decoration: const InputDecoration(
@@ -207,7 +169,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         child: ElevatedButton(
                           onPressed: !isLoading
                               ? () {
-                                  registerUser();
+                                  signInUser();
                                 }
                               : null,
                           style: ElevatedButton.styleFrom(
@@ -215,15 +177,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             foregroundColor: MyColors.black,
                             disabledBackgroundColor: MyColors.grey,
                           ),
-                          child: Text(
-                            !isLoading ? 'Sign Up' : 'Please wait...',
-                          ),
+                          child: Text(!isLoading ? 'Login' : 'Please wait...'),
                         ),
                       ),
                       const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
-                          'By signing up with Onyx, you agree to our Terms of Service and Privacy Policy.',
+                          'By signing in with Onyx, you agree to our Terms of Service and Privacy Policy.',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white),
                         ),
@@ -232,7 +192,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'Already have an account?',
+                            'Didn\'t have an account yet?',
                             style: TextStyle(color: MyColors.white),
                           ),
                           TextButton(
@@ -240,7 +200,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
+                                  builder: (context) =>
+                                      const RegistrationPage(),
                                 ),
                               );
                             },
@@ -250,7 +211,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                             ),
                             child: const Text(
-                              'Log In',
+                              'Register',
                               style: TextStyle(color: MyColors.second),
                             ),
                           ),

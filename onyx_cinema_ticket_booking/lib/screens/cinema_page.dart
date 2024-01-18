@@ -7,7 +7,12 @@ class CinemaPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primary,
-        title: const Text('Cinemas'),
+        title: const Text(
+          'Cinemas',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -131,8 +136,9 @@ class CinemaSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200.0,
+      height: 212.0,
       child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: 4,
         itemBuilder: (context, index) {

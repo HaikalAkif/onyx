@@ -15,7 +15,12 @@ class _FbPageState extends State<FbPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primary,
-        title: const Text('Food and Beverages'),
+        title: const Text(
+          'Food and Beverages',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Padding(

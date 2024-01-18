@@ -1,14 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../styles/color.dart';
 import 'registration_page.dart';
 
 class ProfilePage extends StatelessWidget {
+  void navigateToRegistration(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const RegistrationPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primary,
-        title: const Text('My Profile'),
+        title: const Text(
+          'My Profile',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
       ),
       backgroundColor: MyColors.primary,
@@ -24,11 +39,11 @@ class ProfilePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15.0),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Row(
                   children: [
                     const CircleAvatar(
-                      radius: 50.0,
+                      radius: 48.0,
                       backgroundColor: MyColors.white,
                       child: Text(
                         'HA',
@@ -38,7 +53,7 @@ class ProfilePage extends StatelessWidget {
                             color: Colors.grey),
                       ),
                     ),
-                    const SizedBox(width: 16.0),
+                    const SizedBox(width: 12.0),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,25 +79,32 @@ class ProfilePage extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: MyColors.primary,
-                                  foregroundColor: Colors.white,
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: MyColors.primary,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: const Text(
+                                    'Edit Profile',
+                                    style: TextStyle(fontSize: 12.0),
+                                    maxLines: 1,
+                                  ),
                                 ),
-                                child: const Text('Edit Profile',
-                                    style: TextStyle(fontSize: 12.0)),
                               ),
-                              const SizedBox(width: 16.0),
-                              ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: MyColors.primary,
-                                  foregroundColor: Colors.white,
-                                ),
-                                child: const Text(
-                                  'Settings',
-                                  style: TextStyle(fontSize: 12.0),
+                              const SizedBox(width: 8.0),
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: MyColors.primary,
+                                    foregroundColor: Colors.white,
+                                  ),
+                                  child: const Text(
+                                    'Settings',
+                                    style: TextStyle(fontSize: 12.0),
+                                  ),
                                 ),
                               ),
                             ],
@@ -230,12 +252,8 @@ class ProfilePage extends StatelessWidget {
                           child: const Text('Cancel'),
                         ),
                         TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => RegistrationPage()),
-                            );
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
                           },
                           child: const Text(
                             'Log Out',

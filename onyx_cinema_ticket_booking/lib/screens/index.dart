@@ -12,23 +12,23 @@ class IndexPage extends StatefulWidget {
 }
 
 class _IndexPageState extends State<IndexPage> {
-  late PageController _pageController;
+  final PageController _pageController = PageController(initialPage: 0);
   int _currentIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: _currentIndex);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _pageController = PageController(initialPage: _currentIndex);
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        physics: _currentIndex == 2
-            ? const NeverScrollableScrollPhysics()
-            : const PageScrollPhysics(),
+        // physics: _currentIndex == 2
+        //     ? const NeverScrollableScrollPhysics()
+        //     : const PageScrollPhysics(),
         children: [
           HomePage(),
           CinemaPage(),
@@ -69,14 +69,12 @@ class _IndexPageState extends State<IndexPage> {
         unselectedItemColor: MyColors.grey,
         currentIndex: _currentIndex,
         onTap: (index) {
+          // _pageController.an
           _pageController.animateToPage(
             index,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
-          setState(() {
-            _currentIndex = index;
-          });
         },
         backgroundColor: MyColors.second,
       ),

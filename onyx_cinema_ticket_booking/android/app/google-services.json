@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "828143423734",
+    "project_id": "onyx-cinema",
+    "storage_bucket": "onyx-cinema.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828143423734:android:f720484ddf56146d9cdcd7",
+        "android_client_info": {
+          "package_name": "com.example.onyx_cinema_ticket_booking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBX4EWkkhdtLt_19L8wI99wkln7k2qBPt8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
