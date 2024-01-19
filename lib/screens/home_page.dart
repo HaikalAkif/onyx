@@ -21,39 +21,9 @@ class HomePage extends StatelessWidget {
 
   Future<http.Response> getMovies(BuildContext context) async {
     return http.get(
-      Uri.https('www.tgv.com.my', '/api/landing-page/v2/index.json'),
+      Uri.https('workshop.elyasasmad.com', '/api/movies'),
     );
   }
-
-  // final List<Movie> nowShowingMovies = [
-  //   Movie(
-  //       title: 'The Godfather',
-  //       imageUrl: 'lib/assets/godfather.jpeg',
-  //       starRate: 4.9),
-  //   Movie(
-  //       title: 'The Godfather',
-  //       imageUrl: 'lib/assets/godfather.jpeg',
-  //       starRate: 4.9),
-  //   Movie(
-  //       title: 'The Godfather',
-  //       imageUrl: 'lib/assets/godfather.jpeg',
-  //       starRate: 4.9),
-  // ];
-
-  // final List<Movie> comingSoonMovies = [
-  //   Movie(
-  //       title: 'The Godfather',
-  //       imageUrl: 'lib/assets/godfather.jpeg',
-  //       starRate: 4.9),
-  //   Movie(
-  //       title: 'The Godfather',
-  //       imageUrl: 'lib/assets/godfather.jpeg',
-  //       starRate: 4.9),
-  //   Movie(
-  //       title: 'The Godfather',
-  //       imageUrl: 'lib/assets/godfather.jpeg',
-  //       starRate: 4.9),
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +158,7 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     SizedBox(
-                      height: 246.0,
+                      height: 250.0,
                       child: ListView.builder(
                         clipBehavior: Clip.none,
                         physics: const BouncingScrollPhysics(),
@@ -209,7 +179,7 @@ class HomePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     SizedBox(
-                      height: 246.0,
+                      height: 250.0,
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,

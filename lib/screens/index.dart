@@ -69,14 +69,12 @@ class _IndexPageState extends State<IndexPage> {
         unselectedItemColor: MyColors.grey,
         currentIndex: _currentIndex,
         onTap: (index) {
-          // _pageController.an
           _pageController.animateToPage(
             index,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
           );
         },
-        backgroundColor: MyColors.second,
       ),
     );
   }
