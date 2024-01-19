@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:onyx/components/cinema_selector.dart';
 import 'package:onyx/utils/show_dynamic_bottom_sheet.dart';
 import '../styles/color.dart';
 import './seat_page.dart';
@@ -25,6 +27,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   String selectedDate = 'SUN\n14 Jan';
   String selectedCinema = 'Cinema A';
+
+  User? currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -114,67 +118,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                   child: DateSlider(),
                 ),
                 const SizedBox(height: 30.0),
-                ListTile(
-                  title: const Text(
-                    'Cinema A',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(isCinemaExpanded ? Icons.remove : Icons.add),
-                    color: MyColors.white,
-                    onPressed: () {
-                      setState(() {
-                        isCinemaExpanded = !isCinemaExpanded;
-                      });
-                    },
-                  ),
-                ),
-                if (isCinemaExpanded)
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    color: Colors.transparent,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        PremiereTimeSlider(),
-                      ],
-                    ),
-                  ),
+                CinemaSelector(cinemaName: 'Cinema A'),
                 const Divider(),
-                ListTile(
-                  title: const Text(
-                    'Cinema C',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(isCinemaExpanded ? Icons.remove : Icons.add),
-                    color: MyColors.white,
-                    onPressed: () {
-                      setState(() {
-                        isCinemaExpanded = !isCinemaExpanded;
-                      });
-                    },
-                  ),
-                ),
-                if (isCinemaExpanded)
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    color: Colors.transparent,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        PremiereTimeSlider(),
-                      ],
-                    ),
-                  ),
+                CinemaSelector(cinemaName: 'Cinema C'),
+                Text(currentUser?.photoURL ?? 'No data'),
                 const Divider(),
                 ElevatedButton(
                   onPressed: () {
@@ -182,7 +129,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       context: context,
                       isScrollControlled: true,
                       builder: (context) => Container(
-                        height: MediaQuery.of(context).size.height * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.75,
                         padding: const EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -190,7 +137,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.network(
-                                'https://avatars.githubusercontent.com/u/78308067?v=4',
+                                currentUser?.photoURL ?? 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png',
                                 height: 300.0,
                                 width: 180.0,
                                 fit: BoxFit.cover,

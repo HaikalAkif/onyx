@@ -13,6 +13,8 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  User? currentUser = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,16 +66,20 @@ class ProfilePage extends StatelessWidget {
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 4.0),
-                          const Text(
-                            'haikalakif17@gmail.com',
-                            style: TextStyle(
+                          Text(
+                            currentUser?.email ?? 'haikalakif@gmail.com',
+                            style: const TextStyle(
                                 fontSize: 14.0, color: MyColors.black),
                           ),
                           const SizedBox(height: 4.0),
-                          const Text(
-                            '100002973',
-                            style: TextStyle(
-                                fontSize: 14.0, color: MyColors.black),
+                          Text(
+                            currentUser?.uid ?? '[No UID]',
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: MyColors.black,
+                              overflow: TextOverflow.clip,
+                            ),
+                            maxLines: 1,
                           ),
                           const SizedBox(height: 10.0),
                           Row(
@@ -85,11 +91,13 @@ class ProfilePage extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: MyColors.primary,
                                     foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.all(4.0)
                                   ),
                                   child: const Text(
                                     'Edit Profile',
                                     style: TextStyle(fontSize: 12.0),
                                     maxLines: 1,
+                                    overflow: TextOverflow.clip,
                                   ),
                                 ),
                               ),
@@ -100,6 +108,7 @@ class ProfilePage extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: MyColors.primary,
                                     foregroundColor: Colors.white,
+                                    padding: const EdgeInsets.all(4.0),
                                   ),
                                   child: const Text(
                                     'Settings',

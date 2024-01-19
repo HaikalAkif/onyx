@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
 
   Future<http.Response> getMovies(BuildContext context) async {
     return http.get(
-      Uri.https('www.tgv.com.my', '/api/landing-page/v2/index.json'),
+      Uri.https('app.tgv.com.my', '/api/landing-page/v2/index.json'),
     );
   }
 
@@ -128,7 +128,7 @@ class HomePage extends StatelessWidget {
                           (e) => Movie(
                             title: e['title'],
                             imageUrl:
-                                'https://www.tgv.com.my${e['poster']['original']}',
+                                'https://app.tgv.com.my${e['poster']['original']}',
                             starRate: 4.9,
                           ),
                         )
@@ -140,7 +140,7 @@ class HomePage extends StatelessWidget {
                           (e) => Movie(
                             title: e['title'],
                             imageUrl:
-                                'https://www.tgv.com.my${e['poster']['original']}',
+                                'https://app.tgv.com.my${e['poster']['original']}',
                             starRate: 4.9,
                           ),
                         )
