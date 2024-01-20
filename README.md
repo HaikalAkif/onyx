@@ -21,20 +21,24 @@ Onyx: Cinema Ticket Booking App is a Flutter application that allows users to ex
 
 ## Screenshots
 
-<!-- Will be a screenshots of the apps later -->
+<div style="display: flex; justify-content: space-between;">
+  <img src="https://github.com/HaikalAkif/onyx/assets/92365722/f3e1086f-3610-4735-85ed-69a630de9518" alt="Onyx Signup Screen" width="200"/>
+  <img src="https://github.com/HaikalAkif/onyx/assets/92365722/6f3e6d5c-0089-4a77-b5b6-bc1d758fefe8" alt="Onyx Home Screen" width="200"/>
+  <img src="https://github.com/HaikalAkif/onyx/assets/92365722/24cd7d74-b2f9-46cf-8265-3e1b32696bf9" alt="Onyx Profile SCreen" width="200"/>
+</div>
 
 ## Installation
 
 1. Clone the repository:
 
-   bash
+   ```bash
    git clone https://github.com/HaikalAkif/onyx.git
 
 2. Open your terminal and change the directory into wherever you want to save the project
 
 3. Install dependencies
 
-   bash
+   ```bash
    flutter pub get
 
 4. Run the app in your phone once connected or any phone simulator
