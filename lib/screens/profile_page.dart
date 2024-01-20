@@ -1,16 +1,96 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../styles/color.dart';
-import 'registration_page.dart';
 
-class ProfilePage extends StatelessWidget {
-  void navigateToRegistration(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const RegistrationPage(),
-      ),
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String _username = 'iKool';
+  final String _email = 'haikalakif17@gmail.com';
+  final String _userId = '100002973';
+  String _imagePath = '';
+
+  void _editProfile() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit Profile'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: CircleAvatar(
+                    radius: 48.0,
+                    backgroundColor: MyColors.white,
+                    backgroundImage: _imagePath.isNotEmpty
+                        ? FileImage(File(_imagePath))
+                        : null,
+                    child: _imagePath.isEmpty
+                        ? const Text(
+                            'HA',
+                            style: TextStyle(
+                              fontSize: 48.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
+                          )
+                        : null,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _username = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  print('New Username: $_username');
+                  print('New Image Path: $_imagePath');
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _imagePath = image.path;
+      });
+    }
   }
 
   @override
@@ -42,15 +122,24 @@ class ProfilePage extends StatelessWidget {
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
                   children: [
-                    const CircleAvatar(
-                      radius: 48.0,
-                      backgroundColor: MyColors.white,
-                      child: Text(
-                        'HA',
-                        style: TextStyle(
-                            fontSize: 48.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
+                    GestureDetector(
+                      onTap: _editProfile,
+                      child: CircleAvatar(
+                        radius: 48.0,
+                        backgroundColor: MyColors.white,
+                        backgroundImage: _imagePath.isNotEmpty
+                            ? FileImage(File(_imagePath))
+                            : null,
+                        child: _imagePath.isEmpty
+                            ? const Text(
+                                'HA',
+                                style: TextStyle(
+                                  fontSize: 48.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              )
+                            : null,
                       ),
                     ),
                     const SizedBox(width: 12.0),
@@ -58,22 +147,28 @@ class ProfilePage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'iKool',
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
+                          Text(
+                            _username,
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 4.0),
-                          const Text(
-                            'haikalakif17@gmail.com',
-                            style: TextStyle(
-                                fontSize: 14.0, color: MyColors.black),
+                          Text(
+                            _email,
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: MyColors.black,
+                            ),
                           ),
                           const SizedBox(height: 4.0),
-                          const Text(
-                            '100002973',
-                            style: TextStyle(
-                                fontSize: 14.0, color: MyColors.black),
+                          Text(
+                            _userId,
+                            style: const TextStyle(
+                              fontSize: 14.0,
+                              color: MyColors.black,
+                            ),
                           ),
                           const SizedBox(height: 10.0),
                           Row(
@@ -81,7 +176,7 @@ class ProfilePage extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: _editProfile,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: MyColors.primary,
                                     foregroundColor: Colors.white,
@@ -232,7 +327,7 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 24.0),
             const Text(
-              'V 1.0.1A',
+              'V 1.0.9A',
               style: TextStyle(color: MyColors.white),
             ),
             const SizedBox(height: 16.0),
