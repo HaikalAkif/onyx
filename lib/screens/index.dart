@@ -15,20 +15,11 @@ class _IndexPageState extends State<IndexPage> {
   final PageController _pageController = PageController(initialPage: 0);
   int _currentIndex = 0;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _pageController = PageController(initialPage: _currentIndex);
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-        // physics: _currentIndex == 2
-        //     ? const NeverScrollableScrollPhysics()
-        //     : const PageScrollPhysics(),
         children: [
           HomePage(),
           CinemaPage(),
