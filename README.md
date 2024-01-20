@@ -1,16 +1,52 @@
-# onyx_cinema_ticket_booking
+# Onyx Cinema Ticket Booking App
 
-A new Flutter project.
+## Overview
 
-## Getting Started
+Onyx: Cinema Ticket Booking App is a Flutter application that allows users to explore and book cinema tickets for the latest movies. The app provides a user-friendly interface for discovering now showing and coming soon movies, selecting showtimes, and choosing seats.
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+- Browse now showing and coming soon movies.
+- Search for movies.
+- Book the ticket for the selected cinema
+- Purchase foods and beverages
+- Creating user profiles and preferences.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Contributors
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+|Name                  |Matric Number|
+|----------------------|-------------|
+|Haikal Akif Bin Shaari|2118451      |
+|Raidah Binti Rashidi  |2112866      |
+
+## Screenshots
+
+<!-- Will be a screenshots of the apps later -->
+
+## Installation
+
+1. Clone the repository:
+
+   bash
+   git clone https://github.com/HaikalAkif/onyx.git
+
+2. Open your terminal and change the directory into wherever you want to save the project
+
+3. Install dependencies
+
+   bash
+   flutter pub get
+
+4. Run the app in your phone once connected or any phone simulator
+
+   ```bash
+   flutter run
+
+
+## Built In
+
+<img src="https://www.vectorlogo.zone/logos/flutterio/flutterio-icon.svg" alt="flutter" width="40" height="40"/>
+
+## Acknowledgement
+
+* <a href='https://docs.flutter.dev/'>Flutter Documentation</a>
